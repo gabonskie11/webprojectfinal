@@ -44,6 +44,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <ul class="right">
                 <li><?= $this->Html->link('Logout', ['controller' =>'users', 
                 'action'=> 'logout']); ?></li>
+                <li><?= $this->Html->link('Register', ['controller' =>'users', 
+                'action'=> 'register']); ?></li>
             </ul>
         </div>
     </nav>
