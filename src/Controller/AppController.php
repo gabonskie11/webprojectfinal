@@ -45,25 +45,43 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
-        $this->loadComponent('Auth', [
+         $this->loadComponent('Auth', [
             'authenticate' => [
-                'Form' => [
+                 'Form' => [
                     'fields' => [
-                        'username' => 'username',
-                        'password' => 'password'
-                    ]
-                ]
-                    ],
-                    'loginAction' => [
-                        'controller' => 'Users',
-                        'action' => 'login'
-                    ]
-        ]);
-
+                         'username' => 'username',
+                          'password' => 'password'
+                      ]
+                  ]
+              ],
+              'loginAction' => [
+                  'controller' => 'Users',
+                  'action' => 'login'
+              ]
+          ]);
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
     }
+
+
+    public function beforeRender(Event $event)
+    {
+        if (!array_key_exists('_serialize', $this->viewVars) &&
+            in_array($this->response->type(), ['application/json', 'application/xml'])
+        ) {
+            $this->set('_serialize', true);
+        }
+        // Login Check
+        if($this->request->session()->read('Auth.User')){
+             $this->set('loggedIn', true);   
+        } else {
+            $this->set('loggedIn', false); 
+        }
+    }
+   
+
+
 }

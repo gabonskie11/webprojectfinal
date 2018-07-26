@@ -19,9 +19,9 @@
             echo $this->Form->control('password');
             echo $this->Form->control('name');
             echo $this->Form->control('email');
-            echo $this->Form->control('role');
+            /*echo $this->Form->control('role');
             echo $this->Form->control('status');
-            echo $this->Form->control('date_created');
+            echo $this->Form->control('date_created');*/
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

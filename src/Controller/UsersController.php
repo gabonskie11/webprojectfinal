@@ -105,26 +105,22 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    //resume log in
-    public function resumelogin(){
-        if($this->request->is('jobs')){
-            $user = $this->Auth->identify();
+    
+   public function login(){ 
+    if($this->request->is('post')){
+        $user = $this->Auth->identify();
             if($user){
                 $this->Auth->setUser($user);
-                return $this->redirect(['controller' => 'jobs']);
+                return $this->redirect(['controller'=>'Jobs', 'action'=> 'index']);
             }
             $this->Flash->error('No User found!');
         }
+        
     }
 
-   public function login(){
-    if($this->request->is('jobs')){
-        $user = $this->Auth->identify();
-        if($user){
-            $this->Auth->setUser($user);
-            return $this->redirect(['controller' => 'jobs']);
-        }
-        $this->Flash->error('No User found!');
-    }
+    public function logout(){
+        $this->Flash->success('You are logged out');
+        return $this->redirect($this->Auth->logout());
    }
+   
 }

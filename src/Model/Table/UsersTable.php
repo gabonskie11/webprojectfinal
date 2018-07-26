@@ -34,6 +34,8 @@ class UsersTable extends Table
         $this->setTable('users');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
     }
 
     /**
@@ -71,7 +73,7 @@ class UsersTable extends Table
             ->requirePresence('email', 'create')
             ->notEmpty('email');
 
-        $validator
+        /*$validator
             ->integer('role')
             ->requirePresence('role', 'create')
             ->notEmpty('role');
@@ -86,7 +88,7 @@ class UsersTable extends Table
             ->date('date_created')
             ->requirePresence('date_created', 'create')
             ->notEmpty('date_created');
-
+        */
         return $validator;
     }
 
