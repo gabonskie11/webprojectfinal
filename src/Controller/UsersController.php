@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
+use Cake\Core\Configure;
 
 /**
  * Users Controller
@@ -126,9 +127,10 @@ class UsersController extends AppController
 
    public function register(){
     $user = $this->Users->newEntity();
+    
         if($this->request->is('post')){
             $user = $this->Users->patchEntity($user, $this->request->data);
-            if($this->Users->save($user)){
+            if($this->Users->save($user)){  
                 $this->Flash->success('You are registered and can login');
                 return $this->redirect(['action' => 'login']);
             } else {

@@ -64,7 +64,7 @@ class JobsTable extends Table
             ->maxLength('content', 255)
             ->requirePresence('content', 'create')
             ->notEmpty('content');
-
+        /*
         $validator
             ->integer('no_apply')
             ->requirePresence('no_apply', 'create')
@@ -93,7 +93,7 @@ class JobsTable extends Table
         $validator
             ->date('expire')
             ->requirePresence('expire', 'create')
-            ->notEmpty('expire');
+            ->notEmpty('expire'); */
 
         $validator
             ->scalar('status')

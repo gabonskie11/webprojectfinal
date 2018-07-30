@@ -24,15 +24,11 @@
             echo $this->Form->control('title');
             echo $this->Form->control('email');
             echo $this->Form->control('content');
-            echo $this->Form->control('no_apply');
-            echo $this->Form->control('no_impression');
-            echo $this->Form->control('no_views');
-            echo $this->Form->control('date_created');
-            echo $this->Form->control('start');
-            echo $this->Form->control('expire');
-            echo $this->Form->control('status');
+            echo $this->Form->hidden('start', array('value' => $currentdatetime = date('Y-m-d')));
+            echo $this->Form->hidden('expire', array('value' => $currentdatetime = date('Y-m-d', strtotime('+1 month'))));
+            echo $this->Form->hidden('status', array('value'=> 'Approved'));
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Aprrove')) ?>
     <?= $this->Form->end() ?>
 </div>
