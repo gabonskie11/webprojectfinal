@@ -8,7 +8,8 @@
         <?=$this->Form->input('password', array('type' => 'password')); ?>
         <?= $this->Form->input('name'); ?>
         <?= $this->Form->input('email'); ?>
-        <?= $this->Form->hidden('role', array('value' => 'Employer') )?>
+        <?=
+        $this->Form->hidden('role', array('value' => 'Employer') )?>
         <?= $this->Form->hidden('status', array('value' => 'Pending') )?>
         <?= $this->Form->submit('Register', array('class' => 'button')); ?>
         <?= $this->Form->end(); ?>

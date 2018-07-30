@@ -17,7 +17,6 @@
     <fieldset>
         <legend><?= __('Add a Job') ?></legend>
         <?php
-            
             echo $this->Form->control('title');
             echo $this->Form->control('email');
             echo $this->Form->control('content');

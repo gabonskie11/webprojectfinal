@@ -12,6 +12,10 @@
 </nav>
 <div class="jobs index large-9 medium-8 columns content">
     <h3><?= __('Jobs') ?></h3>
+    <?= $this->Form->create("", ['type'=> 'get']); ?>
+        <?= $this->Form->control(''); ?>
+        <?= $this->Form->button(__('Search')) ?>
+    <?= $this->Form->end(); ?>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

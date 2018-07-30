@@ -20,6 +20,14 @@ class JobsController extends AppController
      */
     public function index()
     {
+        $keyword = $this->request->query('keyword');
+
+        if(!empty($keyword)){
+            $this->paginate = [
+                'conditions' => ['title' => $keyword]
+            ];
+        }
+
         $jobs = $this->paginate($this->Jobs);
 
         $this->set(compact('jobs'));
