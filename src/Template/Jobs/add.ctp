@@ -25,8 +25,6 @@
             echo $this->Form->hidden('no_impression', array('value' => '0'));
             echo $this->Form->hidden('no_views', array('value' => '0'));
             echo $this->Form->hidden('date_created', array('value' => date('Y-m-d')));
-            echo $this->Form->hidden('start', array('value' => date('Y-m-d')));
-            echo $this->Form->hidden('expire', array('value' => date('Y-m-d', strtotime('+1 month'))));
             echo $this->Form->hidden('status', array('value' => 'Pending'));
         ?>
     </fieldset>
