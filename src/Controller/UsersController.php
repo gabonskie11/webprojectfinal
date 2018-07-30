@@ -120,6 +120,18 @@ class UsersController extends AppController
         
     }
 
+    public function resumelogin(){
+        if($this->request->is('post')){
+            $user = $this->Auth->identify();
+                if($user){
+                    $this->Auth->setUser($user);
+                    return $this->redirect(['controller'=>'Jobs', 'action'=> 'index']);
+                }
+                $this->Flash->error('No User found!');
+            }
+    }
+
+
     public function logout(){
         $this->Flash->success('You are logged out');
         return $this->redirect($this->Auth->logout());

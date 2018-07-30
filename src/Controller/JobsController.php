@@ -112,4 +112,18 @@ class JobsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+    //functions for resume 
+
+    public function resumejobs(){
+
+        $jobs = $this->paginate($this->Jobs);
+
+        $this->set(compact('jobs'));
+    }
+
+    public function apply(){
+        
+    }
 }
