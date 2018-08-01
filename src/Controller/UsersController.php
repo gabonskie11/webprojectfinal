@@ -109,14 +109,13 @@ class UsersController extends AppController
 
    public function login(){ 
     if($this->request->is('post')){
-
         $user = $this->Auth->identify();
             if($user && $user['role'] === 'admin'){
                 $this->Auth->setUser($user);
                 return $this->redirect(['controller'=>'Users', 'action'=> 'index']);
             }else if($user && $user['role'] === 'resume'){
                 $this->Auth->setUser($user);
-                return $this->redirect(['controller'=>'Jobs', 'action'=> 'index']);
+                return $this->redirect(['controller'=>'Jobs', 'action'=> 'resumeindex']);
             } else if($user && $user['role'] === 'company'){
                 $this->Auth->setUser($user);
                 return $this->redirect(['controller'=>'Jobs', 'action'=> 'companyindex']);
@@ -126,11 +125,7 @@ class UsersController extends AppController
         }
     }
 
-    public function companyindex(){
-        $users = $this->paginate($this->Users);
-
-        $this->set(compact('users'));
-    }
+    
 
     public function logout(){
         $this->Flash->success('You are logged out');

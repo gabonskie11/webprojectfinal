@@ -32,6 +32,33 @@ class JobsController extends AppController
         $this->set(compact('jobs'));
     }
 
+    //start functions for resume
+    public function resumeindex()
+    {
+        $keyword = $this->request->query('keyword');
+        
+        if(!empty($keyword)){
+            $this->paginate = [
+                'conditions' => ['title LIKE' => '%'.$keyword.'%']
+            ];
+        }
+
+
+        $query = $this->Jobs->find('all')->where(['status' => 'Approved']);
+
+        $this->set('jobs', $this->paginate($query));
+
+    }
+
+    public function resumeview($id = null){
+        $id = $this->Jobs->get($id);
+        $job = $this->Jobs->get($id, [
+            'contain' => []
+        ]);
+        $this->set('job', $job);
+        $this->Jobs->saveField('no_views', $this->Jobs->field('no_views')+1);
+    }
+
     /**
      * View method
      *
