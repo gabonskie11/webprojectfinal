@@ -117,19 +117,8 @@ class UsersController extends AppController
             }
             $this->Flash->error('No User found!');
         }
-        
     }
 
-    public function resumelogin(){
-        if($this->request->is('post')){
-            $user = $this->Auth->identify();
-                if($user){
-                    $this->Auth->setUser($user);
-                    return $this->redirect(['controller'=>'Jobs', 'action'=> 'index']);
-                }
-                $this->Flash->error('No User found!');
-            }
-    }
 
 
     public function logout(){
@@ -137,9 +126,14 @@ class UsersController extends AppController
         return $this->redirect($this->Auth->logout());
    }
 
-   public function register(){
+   public function beforeFilter(Event $event){
+       $this->Auth->allow(['register']);
+       $this->Auth->allow(['resumeregister']);
+       $this->Auth->allow(['companyregister']);
+   }
+
+   public function resumeregister(){
     $user = $this->Users->newEntity();
-    
         if($this->request->is('post')){
             $user = $this->Users->patchEntity($user, $this->request->data);
             if($this->Users->save($user)){  
@@ -153,8 +147,10 @@ class UsersController extends AppController
         $this->set('_serialzie', ['user']);
    }
 
-   public function beforeFilter(Event $event){
-       $this->Auth->allow(['register']);
-   }
+   public function companyregister()
+    {
+
+    }
+
    
 }

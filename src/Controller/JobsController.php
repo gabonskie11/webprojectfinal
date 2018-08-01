@@ -12,7 +12,6 @@ use App\Controller\AppController;
  */
 class JobsController extends AppController
 {
-
     /**
      * Index method
      *
@@ -21,10 +20,10 @@ class JobsController extends AppController
     public function index()
     {
         $keyword = $this->request->query('keyword');
-
+        
         if(!empty($keyword)){
             $this->paginate = [
-                'conditions' => ['title' => $keyword]
+                'conditions' => ['title LIKE' => '%'.$keyword.'%']
             ];
         }
 
@@ -58,8 +57,9 @@ class JobsController extends AppController
     {
         $job = $this->Jobs->newEntity();
         if ($this->request->is('post')) {
+            $this->request->data['posted_by'] = $this->Auth->user('id');
             $job = $this->Jobs->patchEntity($job, $this->request->getData());
-            if ($this->Jobs->save($job)) {
+            if ($this->Jobs->save($this->request->data)) {
                 $this->Flash->success(__('The job has been saved.'));
 
                 return $this->redirect(['action' => 'index']);

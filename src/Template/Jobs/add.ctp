@@ -25,6 +25,7 @@
             echo $this->Form->hidden('no_views', array('value' => '0'));
             echo $this->Form->hidden('date_created', array('value' => date('Y-m-d')));
             echo $this->Form->hidden('status', array('value' => 'Pending'));
+            //echo $this->Form->hidden('posted_by', array('value' => $this->Auth->user('id')));
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
