@@ -57,7 +57,8 @@ class AppController extends Controller
               'loginAction' => [
                   'controller' => 'Users',
                   'action' => 'login'
-              ]
+              ],
+
           ]);
         /*
          * Enable the following component for recommended CakePHP security settings.
@@ -80,7 +81,28 @@ class AppController extends Controller
         } else {
             $this->set('loggedIn', false);  
         }
+    
     }
+
+    public function beforeFilter(Event $event){
+        $this->set('user', $this->Auth->user());
+        
+        if('admin' === $this->Auth->user('role')){
+            $this->Auth->loginRedirect = array(
+                'controller' => 'users',
+                'action' => 'add',
+              );
+        }
+        else if('resume' === $this->Auth->user('role')){
+            $this->Auth->loginRedirect = array(
+                'controller' => 'users',
+                'action' => 'jobs',
+            );
+        }
+
+    }
+
+    
    
 
 

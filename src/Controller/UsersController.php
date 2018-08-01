@@ -107,19 +107,30 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    
    public function login(){ 
     if($this->request->is('post')){
+
         $user = $this->Auth->identify();
-            if($user){
+            if($user && $user['role'] === 'admin'){
+                $this->Auth->setUser($user);
+                return $this->redirect(['controller'=>'Users', 'action'=> 'index']);
+            }else if($user && $user['role'] === 'resume'){
                 $this->Auth->setUser($user);
                 return $this->redirect(['controller'=>'Jobs', 'action'=> 'index']);
+            } else if($user && $user['role'] === 'company'){
+                $this->Auth->setUser($user);
+                return $this->redirect(['controller'=>'Jobs', 'action'=> 'companyindex']);
             }
             $this->Flash->error('No User found!');
+
         }
     }
 
+    public function companyindex(){
+        $users = $this->paginate($this->Users);
 
+        $this->set(compact('users'));
+    }
 
     public function logout(){
         $this->Flash->success('You are logged out');
@@ -130,6 +141,7 @@ class UsersController extends AppController
        $this->Auth->allow(['register']);
        $this->Auth->allow(['resumeregister']);
        $this->Auth->allow(['companyregister']);
+       $this->Auth->authenticate=$this->User;
    }
 
    public function resumeregister(){
