@@ -198,7 +198,6 @@ class JobsController extends AppController
         }
 
         $user_id = $this->Auth->user('id');
-
         $query = $this->Jobs->find('all');
 
         $this->set('jobs', $this->paginate($query));

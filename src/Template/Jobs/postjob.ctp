@@ -26,8 +26,14 @@
             echo $this->Form->hidden('no_impression', array('value' => '0'));
             echo $this->Form->hidden('no_views', array('value' => '0'));
             echo $this->Form->hidden('date_created', array('value' => date('Y-m-d')));
-            echo $this->Form->hidden('posted_by', array('value' => User($id)));
+            //echo $this->Form->hidden('posted_by', array('value' => User($id)));
         ?>
+        <?php   $session = $this->request->session(); // less than 3.5
+        // $session = $this->request->getSession(); // 3.5 or more
+        $user_data = $session->read('Auth.User');
+        if(!empty($user_data)){
+            print_r($user_id);
+  }?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
