@@ -48,7 +48,7 @@ class JobsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+        /*$validator
             ->scalar('title')
             ->maxLength('title', 255)
             ->requirePresence('title', 'create')

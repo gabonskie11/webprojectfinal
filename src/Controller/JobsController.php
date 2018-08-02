@@ -29,7 +29,7 @@ class JobsController extends AppController
 
         $jobs = $this->paginate($this->Jobs);
 
-        $this->set(compact('jobs'));
+        
     }
 
     //start functions for resume
@@ -42,7 +42,6 @@ class JobsController extends AppController
                 'conditions' => ['title LIKE' => '%'.$keyword.'%']
             ];
         }
-
 
         $query = $this->Jobs->find('all')->where(['status' => 'Approved']);
 
@@ -84,8 +83,33 @@ class JobsController extends AppController
     {
         $job = $this->Jobs->newEntity();
         if ($this->request->is('post')) {
-            $this->request->data['jobs']['posted_by'] = $this->Auth->user('id');
-            //$job = $this->Jobs->patchEntity($job, $this->request->getData());
+           
+            $job = $this->Jobs->patchEntity($job, $this->request->getData());
+            if ($this->Jobs->save($job, $this->request->data)) {
+                $this->Flash->success(__('The job has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The job could not be saved. Please, try again.'));
+        }
+        $this->set(compact('job'));
+    }
+
+    public function jobmonitor(){
+        $job = $this->Jobs->get($id, [
+            'contain' => []
+        ]);
+
+        $this->set('job', $job);
+    }
+
+
+    public function postjob()
+    {
+        $job = $this->Jobs->newEntity();
+        if ($this->request->is('post')) {
+           
+            $job = $this->Jobs->patchEntity($job, $this->request->getData());
             if ($this->Jobs->save($job, $this->request->data)) {
                 $this->Flash->success(__('The job has been saved.'));
 
@@ -111,9 +135,9 @@ class JobsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $job = $this->Jobs->patchEntity($job, $this->request->getData());
             if ($this->Jobs->save($job)) {
-                $this->Flash->success(__('The job has been saved.'));
+                $this->Flash->success(__('The job has been updated.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'approvedjobs']);
             }
             $this->Flash->error(__('The job could not be saved. Please, try again.'));
         }
@@ -140,6 +164,20 @@ class JobsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    public function apply($id = null){
+        $this->request->allowMethod(['post', 'apply']);
+        $job = $Jobs->get($id);
+        if($this->apply($job)) {
+            $this->Jobs->updateAll(array('no_apply'=>'no_apply+1'));
+            $this->Flash->success(__('You successfully applied for the job!'));
+        } else {
+            $this->Flash->error(__('Job application failed, please retry.'));
+        }
+        return $this->redirect(['action' => 'resumeindex']);
+    }
+
+
+
 
     //functions for resume 
 
@@ -148,10 +186,6 @@ class JobsController extends AppController
         $jobs = $this->paginate($this->Jobs);
 
         $this->set(compact('jobs'));
-    }
-
-    public function apply(){
-        
     }
 
     public function companyindex(){
@@ -165,8 +199,40 @@ class JobsController extends AppController
 
         $user_id = $this->Auth->user('id');
 
-        $query = $this->Jobs->find('all')->where(['id' => $user_id]);
+        $query = $this->Jobs->find('all');
 
         $this->set('jobs', $this->paginate($query));
+    }
+
+    public function approvedjobs()
+    {
+        $keyword = $this->request->query('keyword');
+        
+        if(!empty($keyword)){
+            $this->paginate = [
+                'conditions' => ['title LIKE' => '%'.$keyword.'%']
+            ];
+        }
+
+        $query = $this->Jobs->find('all')->where(['status' => 'Approved']);
+
+        $this->set('jobs', $this->paginate($query));
+
+    }
+
+    public function pendingjobs()
+    {
+        $keyword = $this->request->query('keyword');
+        
+        if(!empty($keyword)){
+            $this->paginate = [
+                'conditions' => ['title LIKE' => '%'.$keyword.'%']
+            ];
+        }
+
+        $query = $this->Jobs->find('all')->where(['status' => 'Pending']);
+
+        $this->set('jobs', $this->paginate($query));
+
     }
 }

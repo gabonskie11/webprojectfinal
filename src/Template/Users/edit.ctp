@@ -28,8 +28,9 @@
             echo $this->Form->control('role');
             echo $this->Form->control('status');
             echo $this->Form->control('date_created');
+            echo $this->Form->hidden('status', array('value'=> 'Active'));
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Approve')) ?>
     <?= $this->Form->end() ?>
 </div>

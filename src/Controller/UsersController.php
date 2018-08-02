@@ -27,6 +27,40 @@ class UsersController extends AppController
         $this->set(compact('users'));
     }
 
+    public function adminindex(){
+
+    }
+
+    public function activeusers()
+    {
+        $keyword = $this->request->query('keyword');
+        
+        if(!empty($keyword)){
+            $this->paginate = [
+                'conditions' => ['name LIKE' => '%'.$keyword.'%']
+            ];
+        }
+
+        $query = $this->Users->find('all')->where(['status' => 'Active']);
+
+        $this->set('users', $this->paginate($query));
+    }
+
+    public function pendingusers()
+    {
+        $keyword = $this->request->query('keyword');
+        
+        if(!empty($keyword)){
+            $this->paginate = [
+                'conditions' => ['name LIKE' => '%'.$keyword.'%']
+            ];
+        }
+
+        $query = $this->Users->find('all')->where(['status' => 'Pending']);
+
+        $this->set('users', $this->paginate($query));
+    }
+
     /**
      * View method
      *
@@ -80,7 +114,7 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'activeusers']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
@@ -110,22 +144,20 @@ class UsersController extends AppController
    public function login(){ 
     if($this->request->is('post')){
         $user = $this->Auth->identify();
-            if($user && $user['role'] === 'admin'){
+            if($user && $user['role'] === 'admin' && $user['status'] === 'Active'){
                 $this->Auth->setUser($user);
-                return $this->redirect(['controller'=>'Users', 'action'=> 'index']);
-            }else if($user && $user['role'] === 'resume'){
+                return $this->redirect(['controller'=>'Users', 'action'=> 'adminindex']);
+            }else if($user && $user['role'] === 'resume' && $user['status'] === 'Active'){
                 $this->Auth->setUser($user);
                 return $this->redirect(['controller'=>'Jobs', 'action'=> 'resumeindex']);
-            } else if($user && $user['role'] === 'company'){
+            } else if($user && $user['role'] === 'company' && $user['status'] === 'Active'){
                 $this->Auth->setUser($user);
                 return $this->redirect(['controller'=>'Jobs', 'action'=> 'companyindex']);
             }
-            $this->Flash->error('No User found!');
+            $this->Flash->error('Login Error!');
 
         }
     }
-
-    
 
     public function logout(){
         $this->Flash->success('You are logged out');
@@ -156,6 +188,18 @@ class UsersController extends AppController
 
    public function companyregister()
     {
+        $user = $this->Users->newEntity();
+        if($this->request->is('post')){
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            if($this->Users->save($user)){  
+                $this->Flash->success('You are registered and can login');
+                return $this->redirect(['action' => 'login']);
+            } else {
+                $this->Flash->error('You are not registered');
+            }
+        }
+        $this->set(compact('user'));
+        $this->set('_serialzie', ['user']);
 
     }
 

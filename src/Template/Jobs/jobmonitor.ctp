@@ -7,7 +7,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Job Monitoring'), ['action' => 'companyindex']) ?></li>
+        <li><?= $this->Html->link(__('Job Monitoring'), ['action' => 'jobmonitor']) ?></li>
         <li><?= $this->Html->link(__('Post a job'), ['action' => 'postjob']) ?></li>
     </ul>
 </nav>
