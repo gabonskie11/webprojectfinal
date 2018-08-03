@@ -32,7 +32,7 @@
                 <th scope="col"><?= $this->Paginator->sort('no_views') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('date_created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('start') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('expire') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('expires') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('status') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>

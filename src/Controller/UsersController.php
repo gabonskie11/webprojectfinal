@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 
 /**
  * Users Controller
@@ -61,6 +62,22 @@ class UsersController extends AppController
         $this->set('users', $this->paginate($query));
     }
 
+    public function disabledusers()
+    {
+        $keyword = $this->request->query('keyword');
+        
+        if(!empty($keyword)){
+            $this->paginate = [
+                'conditions' => ['name LIKE' => '%'.$keyword.'%']
+            ];
+        }
+
+        $query = $this->Users->find('all')->where(['status' => 'Disabled']);
+
+        $this->set('users', $this->paginate($query));
+
+    }
+
     /**
      * View method
      *
@@ -82,7 +99,7 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function adminadd()
     {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
@@ -90,7 +107,7 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'activeusers']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
@@ -128,17 +145,35 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function disable($id = null)
     {
+        $usersTable = TableRegistry::get('Users');
+        $user = $usersTable->get($id);
+        
+        $user->status = 'Disabled';
+        $usersTable->save($user);
+        return $this->redirect(['action' => 'activeusers']);
+    }
+
+    public function approve($id = null)
+    {
+        $usersTable = TableRegistry::get('Users');
+        $user = $usersTable->get($id);
+        $user->status = 'Approved';
+        $usersTable->save($user);
+        return $this->redirect(['action' => 'activeusers']);
+    }
+
+    public function delete($id = null){
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
+            $this->Flash->success(__('User has been deleted.'));
         } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            $this->Flash->error(__('User could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'disabledusers']);
     }
 
    public function login(){ 
@@ -146,7 +181,7 @@ class UsersController extends AppController
         $user = $this->Auth->identify();
             if($user && $user['role'] === 'admin' && $user['status'] === 'Active'){
                 $this->Auth->setUser($user);
-                return $this->redirect(['controller'=>'Users', 'action'=> 'adminindex']);
+                return $this->redirect(['controller'=>'Users', 'action'=> 'activeusers']);
             }else if($user && $user['role'] === 'resume' && $user['status'] === 'Active'){
                 $this->Auth->setUser($user);
                 return $this->redirect(['controller'=>'Jobs', 'action'=> 'resumeindex']);

@@ -32,7 +32,7 @@
                 <th scope="col"><?= $this->Paginator->sort('no_views') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('date_created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('start') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('expire') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('expires') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('status') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -51,7 +51,7 @@
                 <td><?= h($job->expire) ?></td>
                 <td><?= h($job->status) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $job->id]) ?>
+                    <?= $this->Html->link(__('Approve'), ['action' => 'approve', $job->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $job->id], ['confirm' => __('Are you sure you want to delete # {0}?', $job->id)]) ?>
                 </td>
             </tr>

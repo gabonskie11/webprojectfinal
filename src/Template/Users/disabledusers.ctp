@@ -16,15 +16,14 @@
     </ul>
 </nav>
 <div class="users index large-10 medium-8 columns content">
-    <nav>
     <?= $this->Form->create("", ['type'=> 'get']); ?>
         <h6>Search by User's Name</h6>
         <?= $this->Form->control('keyword', ['default'=> $this->request->query('keyword')]); ?>
         <?= $this->Form->button(__('Search')) ?>    
     <?= $this->Form->end(); ?>
-    </nav>
+
     <?= $this->Form->create(); ?>
-        <?= $this->Html->link(__('Add a user'), ['control'=>'users', 'action'=> 'adminadd']); ?>
+        <?= $this->Html->link(__('Add a user'), ['control'=>'users', 'action'=> 'add']); ?>
     <?= $this->Form->end(); ?>
     
     <table cellpadding="0" cellspacing="0">
@@ -51,7 +50,7 @@
                 <td><?= h($user->status) ?></td>
                 <td><?= h($user->date_created) ?></td>
                 <td class="actions">
-                    <?= $this->Form->postLink(__('Disable'), ['action' => 'disable', $user->id], ['confirm' => __('Are you sure you want to disable user # {0}?', $user->id)]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete user # {0}?', $user->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

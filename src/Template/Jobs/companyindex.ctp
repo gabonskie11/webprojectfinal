@@ -4,14 +4,14 @@
  * @var \App\Model\Entity\Job[]|\Cake\Collection\CollectionInterface $jobs
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Job Monitoring'), ['action' => 'companyindex']) ?></li>
         <li><?= $this->Html->link(__('Post a job'), ['action' => 'postjob']) ?></li>
     </ul>
 </nav>
-<div class="jobs index large-9 medium-8 columns content">
+<div class="jobs index large-10 medium-8 columns content">
     <h3><?= __('Jobs') ?></h3>
         <?= $this->Form->create("", ['type'=> 'get']); ?>
         <h5>Search Job Title </h5>
@@ -37,7 +37,7 @@
         <tbody>
             <?php foreach ($jobs as $job): ?>
             <tr>
-                <td><?= h($job->title) ?></td>
+                <td><?= $this->Html->link(($job->title), ['action'=> 'companyview', $job->id]) ?></td>
                 <td><?= h($job->email) ?></td>
                 <td><?= h($job->content) ?></td>
                 <td><?= $this->Number->format($job->no_apply) ?></td>
@@ -49,7 +49,7 @@
                 <td><?= h($job->status) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $job->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $job->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'companyedit', $job->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $job->id], ['confirm' => __('Are you sure you want to delete # {0}?', $job->id)]) ?>
                 </td>
             </tr>

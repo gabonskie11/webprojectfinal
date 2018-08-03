@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Jobs Controller
@@ -12,6 +13,17 @@ use App\Controller\AppController;
  */
 class JobsController extends AppController
 {
+    public $paginate = [
+        'limit' => 10,
+        
+    ];
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Paginator');
+    }
+
+
     /**
      * Index method
      *
@@ -36,6 +48,7 @@ class JobsController extends AppController
     public function resumeindex()
     {
         $keyword = $this->request->query('keyword');
+        $jobs = TableRegistry::get('Jobs');
         
         if(!empty($keyword)){
             $this->paginate = [
@@ -43,8 +56,11 @@ class JobsController extends AppController
             ];
         }
 
-        $query = $this->Jobs->find('all')->where(['status' => 'Approved']);
-
+        $query = $jobs->find('all')->where(['status' => 'Approved']);
+        foreach ($query as $job) {
+            $job->no_impression += 1;
+            $jobs->save($job);
+        }
         $this->set('jobs', $this->paginate($query));
 
     }
@@ -67,10 +83,21 @@ class JobsController extends AppController
      */
     public function view($id = null)
     {
+        
+        $jobsTable = TableRegistry::get('Jobs');
+        $jobs = $jobsTable->get($id);
+            $jobs->no_views = $jobs->no_views+1;
+        ($jobsTable->save($jobs));
         $job = $this->Jobs->get($id, [
             'contain' => []
         ]);
+        $this->set('job', $job);
+    }
 
+    public function companyview($id = null){
+        $job = $this->Jobs->get($id, [
+            'contain' => []
+        ]);
         $this->set('job', $job);
     }
 
@@ -79,23 +106,22 @@ class JobsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
+    public function add(){
         $job = $this->Jobs->newEntity();
-        if ($this->request->is('post')) {
-           
+        if ($this->request->is('post')){
             $job = $this->Jobs->patchEntity($job, $this->request->getData());
-            if ($this->Jobs->save($job, $this->request->data)) {
+            if ($this->Jobs->save($job)) {
                 $this->Flash->success(__('The job has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'companyindex']);
             }
             $this->Flash->error(__('The job could not be saved. Please, try again.'));
         }
         $this->set(compact('job'));
+        
     }
 
     public function jobmonitor(){
+        $id = $this->Auth->
         $job = $this->Jobs->get($id, [
             'contain' => []
         ]);
@@ -104,16 +130,16 @@ class JobsController extends AppController
     }
 
 
-    public function postjob()
-    {
+    public function postjob(){
+        $uid = $this->Auth->user('id');
         $job = $this->Jobs->newEntity();
-        if ($this->request->is('post')) {
-           
+        if ($this->request->is('post')){
             $job = $this->Jobs->patchEntity($job, $this->request->getData());
-            if ($this->Jobs->save($job, $this->request->data)) {
-                $this->Flash->success(__('The job has been saved.'));
+            $job->posted_by = $uid;
+            if ($this->Jobs->save($job)) {
 
-                return $this->redirect(['action' => 'index']);
+                $this->Flash->success(__('The job has been saved.'));
+                return $this->redirect(['action' => 'companyindex']);
             }
             $this->Flash->error(__('The job could not be saved. Please, try again.'));
         }
@@ -144,6 +170,23 @@ class JobsController extends AppController
         $this->set(compact('job'));
     }
 
+    public function companyedit($id = null)
+    {
+        $job = $this->Jobs->get($id, [
+            'contain' => []
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $job = $this->Jobs->patchEntity($job, $this->request->getData());
+            if ($this->Jobs->save($job)) {
+                $this->Flash->success(__('The job has been updated.'));
+
+                return $this->redirect(['action' => 'companyindex']);
+            }
+            $this->Flash->error(__('The job could not be saved. Please, try again.'));
+        }
+        $this->set(compact('job'));
+    }
+
     /**
      * Delete method
      *
@@ -165,19 +208,18 @@ class JobsController extends AppController
     }
 
     public function apply($id = null){
-        $this->request->allowMethod(['post', 'apply']);
-        $job = $Jobs->get($id);
-        if($this->apply($job)) {
-            $this->Jobs->updateAll(array('no_apply'=>'no_apply+1'));
-            $this->Flash->success(__('You successfully applied for the job!'));
+        $jobsTable = TableRegistry::get('Jobs');
+        $jobs = $jobsTable->get($id);
+        $jobs->no_apply = $jobs->no_apply+1;
+        if($jobsTable->save($jobs)){
+            $this->Flash->success(__('Successfully Applied!'));
         } else {
-            $this->Flash->error(__('Job application failed, please retry.'));
+            $this->Flash->error(__('Application error. Please try again.'));
         }
+
         return $this->redirect(['action' => 'resumeindex']);
+        
     }
-
-
-
 
     //functions for resume 
 
@@ -198,7 +240,7 @@ class JobsController extends AppController
         }
 
         $user_id = $this->Auth->user('id');
-        $query = $this->Jobs->find('all');
+        $query = $this->Jobs->find('all')->where(['posted_by' => $user_id]);
 
         $this->set('jobs', $this->paginate($query));
     }
@@ -233,5 +275,15 @@ class JobsController extends AppController
 
         $this->set('jobs', $this->paginate($query));
 
+    }
+
+    public function approve($id = null){
+        $jobsTable = TableRegistry::get('Jobs');
+        $job = $jobsTable->get($id);
+        $job->start = date('Y-m-d');
+        $job->expire = date('Y-m-d', strtotime('+1 month'));
+        $job->status = 'Approved';
+        $jobsTable->save($job);
+        return $this->redirect(['action' => 'pendingjobs']);
     }
 }

@@ -9,13 +9,13 @@
     <li class="heading"><?= __('User Dashboard') ?></li>
         <li><?= $this->Html->link(__('Active Users'), ['action' => 'activeusers']) ?></li>
         <li><?= $this->Html->link(__('Pending Users'), ['action' => 'pendingusers']) ?></li>
+        <li><?= $this->Html->link(__('Disabled Users'), ['action' => 'disabledusers']) ?></li>
         <li class="heading"><?= __('Jobs Dashboard') ?></li>
         <li><?= $this->Html->link(__('Approved Jobs'), ['controller'=>'jobs', 'action' => 'approvedjobs']) ?></li>
         <li><?= $this->Html->link(__('Pending Jobs'), ['controller'=>'jobs', 'action' => 'pendingjobs']) ?></li>
     </ul>
 </nav>
 <div class="users index large-10 medium-8 columns content">
-    <h3><?= __('Users Dashboard for Admin') ?></h3>
     <?= $this->Form->create("", ['type'=> 'get']); ?>
         <h6>Search by User's Name</h6>
         <?= $this->Form->control('keyword', ['default'=> $this->request->query('keyword')]); ?>
@@ -45,8 +45,8 @@
                 <td><?= h($user->status) ?></td>
                 <td><?= h($user->date_created) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                    <?= $this->Html->link(__('Approve'), ['action' => 'approve', $user->id]) ?>
+                    <?= $this->Form->postLink(__('Disable'), ['action' => 'disable', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
