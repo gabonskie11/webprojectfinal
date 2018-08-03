@@ -9,6 +9,7 @@
         <li class="heading"><?= __('Users Dashboard') ?></li>
         <li><?= $this->Html->link(__('Active Users'), ['controller'=>'users', 'action' => 'activeusers']) ?></li>
         <li><?= $this->Html->link(__('Pending Users'), ['controller'=>'users', 'action' => 'pendingusers']) ?></li>
+        <li><?= $this->Html->link(__('Disabled Users'), ['controller'=>'users', 'action' => 'disabledusers']) ?></li>
         <li class="heading"><?= __('Jobs Dashboard') ?></li>
         <li><?= $this->Html->link(__('Approved Jobs'), ['action' => 'approvedjobs']) ?></li>
         <li><?= $this->Html->link(__('Pending Jobs'), ['action' => 'pendingjobs']) ?></li>
@@ -20,6 +21,10 @@
         <h5>Search Job Title </h5>
         <?= $this->Form->control('keyword', ['default'=> $this->request->query('keyword')]); ?>
         <?= $this->Form->button(__('Search')) ?>
+    <?= $this->Form->end(); ?>
+
+    <?= $this->Form->create(); ?>
+        <?= $this->Html->link(__('Add a job'), ['control'=>'users', 'action'=> 'adminjobadd']); ?>
     <?= $this->Form->end(); ?>
     <table cellpadding="4" cellspacing="0">
         <thead>
@@ -51,7 +56,6 @@
                 <td><?= h($job->expire) ?></td>
                 <td><?= h($job->status) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $job->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $job->id], ['confirm' => __('Are you sure you want to delete # {0}?', $job->id)]) ?>
                 </td>
             </tr>

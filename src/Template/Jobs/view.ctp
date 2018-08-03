@@ -25,37 +25,6 @@
             <th scope="row"><?= __('Content') ?></th>
             <td><?= h($job->content) ?></td>
         </tr>
-        <tr>
-            <th scope="row"><?= __('Status') ?></th>
-            <td><?= h($job->status) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($job->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('No Apply') ?></th>
-            <td><?= $this->Number->format($job->no_apply) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('No Impression') ?></th>
-            <td><?= $this->Number->format($job->no_impression) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('No Views') ?></th>
-            <td><?= $this->Number->format($job->no_views) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Date Created') ?></th>
-            <td><?= h($job->date_created) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Start') ?></th>
-            <td><?= h($job->start) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Expire') ?></th>
-            <td><?= h($job->expire) ?></td>
-        </tr>
+    
     </table>
 </div>

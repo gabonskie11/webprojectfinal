@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use App\Controller\QueryExpression;
 
 /**
  * Jobs Controller
@@ -57,6 +58,7 @@ class JobsController extends AppController
         }
 
         $query = $jobs->find('all')->where(['status' => 'Approved']);
+
         foreach ($query as $job) {
             $job->no_impression += 1;
             $jobs->save($job);
@@ -86,7 +88,7 @@ class JobsController extends AppController
         
         $jobsTable = TableRegistry::get('Jobs');
         $jobs = $jobsTable->get($id);
-            $jobs->no_views = $jobs->no_views+1;
+        $jobs->no_views = $jobs->no_views+1;
         ($jobsTable->save($jobs));
         $job = $this->Jobs->get($id, [
             'contain' => []
@@ -117,7 +119,6 @@ class JobsController extends AppController
             $this->Flash->error(__('The job could not be saved. Please, try again.'));
         }
         $this->set(compact('job'));
-        
     }
 
     public function jobmonitor(){
@@ -286,4 +287,22 @@ class JobsController extends AppController
         $jobsTable->save($job);
         return $this->redirect(['action' => 'pendingjobs']);
     }
+
+    public function adminjobadd(){
+        $uid = $this->Auth->user('id');
+        $job = $this->Jobs->newEntity();
+        if ($this->request->is('post')){
+            $job = $this->Jobs->patchEntity($job, $this->request->getData());
+            $job->posted_by = $uid;
+            if ($this->Jobs->save($job)) {
+
+                $this->Flash->success(__('The job has been saved.'));
+                return $this->redirect(['action' => 'approvedjobs']);
+            }
+            $this->Flash->error(__('The job could not be saved. Please, try again.'));
+        }
+        $this->set(compact('job'));
+
+    }
+
 }

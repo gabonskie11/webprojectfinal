@@ -9,6 +9,7 @@
     <li class="heading"><?= __('Users Dashboard') ?></li>
         <li><?= $this->Html->link(__('Active Users'), ['controller'=>'users', 'action' => 'activeusers']) ?></li>
         <li><?= $this->Html->link(__('Pending Users'), ['controller'=>'users', 'action' => 'pendingusers']) ?></li>
+        <li><?= $this->Html->link(__('Disabled Users'), ['controller'=>'users', 'action' => 'disabledusers']) ?></li>
         <li class="heading"><?= __('Jobs Dashboard') ?></li>
         <li><?= $this->Html->link(__('Approved Jobs'), ['action' => 'approvedjobs']) ?></li>
         <li><?= $this->Html->link(__('Pending Jobs'), ['action' => 'pendingjobs']) ?></li>

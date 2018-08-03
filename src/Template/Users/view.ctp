@@ -4,16 +4,18 @@
  * @var \App\Model\Entity\User $user
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
+<nav class="large-2 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?> </li>
+    <li class="heading"><?= __('User Dashboard') ?></li>
+        <li><?= $this->Html->link(__('Active Users'), ['action' => 'activeusers']) ?></li>
+        <li><?= $this->Html->link(__('Pending Users'), ['action' => 'pendingusers']) ?></li>
+        <li><?= $this->Html->link(__('Disabled Users'), ['action' => 'disabledusers']) ?></li>
+        <li class="heading"><?= __('Jobs Dashboard') ?></li>
+        <li><?= $this->Html->link(__('Approved Jobs'), ['controller'=>'jobs', 'action' => 'approvedjobs']) ?></li>
+        <li><?= $this->Html->link(__('Pending Jobs'), ['controller'=>'jobs', 'action' => 'pendingjobs']) ?></li>
     </ul>
 </nav>
-<div class="users view large-9 medium-8 columns content">
+<div class="users view large-10 medium-8 columns content">
     <h3><?= h($user->name) ?></h3>
     <table class="vertical-table">
         <tr>
@@ -42,7 +44,7 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Role') ?></th>
-            <td><?= $this->Number->format($user->role) ?></td>
+            <td><?= h($user->role) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Date Created') ?></th>

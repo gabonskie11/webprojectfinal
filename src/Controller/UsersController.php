@@ -159,7 +159,7 @@ class UsersController extends AppController
     {
         $usersTable = TableRegistry::get('Users');
         $user = $usersTable->get($id);
-        $user->status = 'Approved';
+        $user->status = 'Active';
         $usersTable->save($user);
         return $this->redirect(['action' => 'activeusers']);
     }
