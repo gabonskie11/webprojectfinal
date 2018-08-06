@@ -44,7 +44,6 @@ class JobsController extends AppController
 
         
     }
-
     //start functions for resume
     public function resumeindex()
     {
@@ -53,7 +52,8 @@ class JobsController extends AppController
         
         if(!empty($keyword)){
             $this->paginate = [
-                'conditions' => ['title LIKE' => '%'.$keyword.'%']
+                'conditions' => ['title LIKE' => '%'.$keyword.'%'],
+                'conditions' => ['content LIKE' => '%'.$keyword.'%']
             ];
         }
 
@@ -68,12 +68,14 @@ class JobsController extends AppController
     }
 
     public function resumeview($id = null){
-        $id = $this->Jobs->get($id);
+        $jobsTable = TableRegistry::get('Jobs');
+        $jobs = $jobsTable->get($id);
+        $jobs->no_views = $jobs->no_views+1;
+        ($jobsTable->save($jobs));
         $job = $this->Jobs->get($id, [
             'contain' => []
         ]);
         $this->set('job', $job);
-        $this->Jobs->saveField('no_views', $this->Jobs->field('no_views')+1);
     }
 
     /**
@@ -97,6 +99,13 @@ class JobsController extends AppController
     }
 
     public function companyview($id = null){
+        $job = $this->Jobs->get($id, [
+            'contain' => []
+        ]);
+        $this->set('job', $job);
+    }
+
+    public function adminview($id=null){
         $job = $this->Jobs->get($id, [
             'contain' => []
         ]);
@@ -163,7 +172,6 @@ class JobsController extends AppController
             $job = $this->Jobs->patchEntity($job, $this->request->getData());
             if ($this->Jobs->save($job)) {
                 $this->Flash->success(__('The job has been updated.'));
-
                 return $this->redirect(['action' => 'approvedjobs']);
             }
             $this->Flash->error(__('The job could not be saved. Please, try again.'));
@@ -236,7 +244,8 @@ class JobsController extends AppController
         
         if(!empty($keyword)){
             $this->paginate = [
-                'conditions' => ['title LIKE' => '%'.$keyword.'%']
+                'conditions' => ['title LIKE' => '%'.$keyword.'%'],
+                'conditions' => ['content LIKE' => '%'.$keyword.'%']
             ];
         }
 
@@ -252,7 +261,9 @@ class JobsController extends AppController
         
         if(!empty($keyword)){
             $this->paginate = [
-                'conditions' => ['title LIKE' => '%'.$keyword.'%']
+                'conditions' => ['title LIKE' => '%'.$keyword.'%'],
+                'conditions' => ['email LIKE' => '%'.$keyword.'%'],
+                'conditions' => ['content LIKE' => '%'.$keyword.'%']
             ];
         }
 

@@ -4,10 +4,7 @@
  * @var \App\Model\Entity\Job[]|\Cake\Collection\CollectionInterface $jobs
  */
 ?>
-<nav class="large-2 medium-4 columns" id="actions-sidebar">
-    
-</nav>
-<div class="jobs index large-10 medium-8 columns content">
+<div class="jobs index large-12 medium-8 columns content">
     <h3><?= __('Jobs') ?></h3>
         <?= $this->Form->create("", ['type'=> 'get']); ?>
         <h5>Search Job Title </h5>
@@ -27,7 +24,7 @@
             <?php foreach ($jobs as $job): ?>
             <tr>
                
-                <td><?= $this->Html->link(($job->title), ['action'=> 'view', $job->id]) ?></td>
+                <td><?= $this->Html->link(($job->title), ['action'=> 'resumeview', $job->id]) ?></td>
                 <td><?= h($job->content) ?></td>
 
                 <td class="actions">

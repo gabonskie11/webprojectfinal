@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\View\Helper\HtmlHelper;
 
 /**
  * Users Controller
@@ -28,9 +29,10 @@ class UsersController extends AppController
         $this->set(compact('users'));
     }
 
-    public function adminindex(){
-
-    }
+    /**
+     * admin functions for pagination of every users by status 'active','pending','disabled';
+     * 
+     */
 
     public function activeusers()
     {

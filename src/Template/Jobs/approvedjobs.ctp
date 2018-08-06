@@ -45,9 +45,9 @@
         <tbody>
             <?php foreach ($jobs as $job): ?>
             <tr>
-                <td><?= $this->Html->link(($job->title), ['action'=> 'view', $job->id]) ?></td>
+                <td><?= $this->Html->link(($job->title), ['action'=> 'adminview', $job->id]) ?></td>
                 <td><?= h($job->email) ?></td>
-                <td><?= $this->Html->link(($job->content), ['action'=> 'view', $job->id]) ?></td>
+                <td><?= h($job->content) ?></td>
                 <td><?= $this->Number->format($job->no_apply) ?></td>
                 <td><?= $this->Number->format($job->no_impression) ?></td>
                 <td><?= $this->Number->format($job->no_views) ?></td>
