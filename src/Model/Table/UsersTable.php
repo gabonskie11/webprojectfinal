@@ -58,10 +58,11 @@ class UsersTable extends Table
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255)
+            ->maxLength('password', 50)
+            ->minLength('password', 6)
             ->requirePresence('password', 'create')
             ->notEmpty('password');
-
+        
         $validator
             ->scalar('name')
             ->maxLength('name', 255)
@@ -73,6 +74,25 @@ class UsersTable extends Table
             ->requirePresence('email', 'create')
             ->notEmpty('email');
 
+            $validator->add('password', 'custom', [
+                'rule' => function ($value, $context){
+                    
+                    if(preg_match('/[a-zA-Z0-9|\!\@\#\$\%\^\&\*\(\)\_\-\+\=\;\:\"\'\\\,\.\<\>\/\?\{\[\}\]]/i',$value)) {
+                        $to_split = str_split($value);
+                        if($to_split[0] == ' ' || $to_split[count($to_split)-1] == ' '){
+                            return False;
+                        }
+                        else{
+                            return True;
+                        }
+                    }else{
+                        return False;
+                    }
+    
+                },
+                'message' => 'The title is not valid'
+            ]);
+        
         /*$validator
             ->integer('role')
             ->requirePresence('role', 'create')

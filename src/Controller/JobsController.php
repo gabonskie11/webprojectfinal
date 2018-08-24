@@ -16,8 +16,8 @@ class JobsController extends AppController
 {
     public $paginate = [
         'limit' => 10,
-        
     ];
+
     public function initialize()
     {
         parent::initialize();
@@ -41,9 +41,8 @@ class JobsController extends AppController
         }
 
         $jobs = $this->paginate($this->Jobs);
-
-        
     }
+    
     //start functions for resume
     public function resumeindex()
     {
@@ -212,10 +211,8 @@ class JobsController extends AppController
         } else {
             $this->Flash->error(__('The job could not be deleted. Please, try again.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
-
     public function apply($id = null){
         $jobsTable = TableRegistry::get('Jobs');
         $jobs = $jobsTable->get($id);

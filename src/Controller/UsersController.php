@@ -216,7 +216,7 @@ class UsersController extends AppController
                 $this->Flash->success('You are registered and can login');
                 return $this->redirect(['action' => 'login']);
             } else {
-                $this->Flash->error('You are not registered');
+                $this->Flash->error('Registration Error');
             }
         }
         $this->set(compact('user'));
